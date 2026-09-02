@@ -118,6 +118,13 @@ docker compose exec mosquitto mosquitto_sub -h localhost -t 'factory/+/+/telemet
 
 This blocks and waits. Leave it running.
 
+> **Running this lab a second time?** Messages may appear the instant you
+> subscribe, before you have published anything. Those are *retained* messages
+> left over from your previous run — the broker keeps them in the
+> `mosquitto_data` volume, so neither `docker compose restart` nor
+> `docker compose down` clears them. Nothing is broken. The retained-message
+> section below explains what they are; Lesson 11 shows how to wipe them.
+
 > `-h localhost` is correct **here** because the command runs inside the
 > mosquitto container. From any other container it would be `-h mosquitto`.
 > Lesson 04 covers why.
@@ -132,7 +139,7 @@ This blocks and waits. Leave it running.
 Open a **second PowerShell window** in the same folder:
 
 ```powershell
-cd C:\Users\<you>\projects\Danfoss-MING
+cd C:\Users\<you>\projects\docker-iiot-training
 docker compose exec mosquitto mosquitto_pub -h localhost -t 'factory/line1/press01/telemetry/temperature' -m '42.5'
 ```
 

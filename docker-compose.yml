@@ -69,7 +69,7 @@ services:
       - "host.docker.internal:host-gateway"
     volumes:
       # Named volume, not a bind mount: the image runs as UID 1000 and a bind
-      # mount would hit permission errors on most hosts. See docs/09.
+      # mount would hit permission errors on most hosts. See docs/05.
       - nodered_data:/data
     networks:
       - iiot-net

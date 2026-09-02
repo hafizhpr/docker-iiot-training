@@ -76,7 +76,7 @@ Read the summary it prints before confirming. Every time.
 ## Remove only this course
 
 ```powershell
-cd path/to/Danfoss-MING
+cd path/to/docker-iiot-training
 docker compose down -v --rmi all
 ```
 

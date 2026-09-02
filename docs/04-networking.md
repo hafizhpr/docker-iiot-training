@@ -42,8 +42,8 @@ mqtt://mosquitto:1883      not   mqtt://172.21.0.3:1883
 http://influxdb:8086       not   http://172.21.0.2:8086
 ```
 
-Container IP addresses change on every restart. Service names do not. Always
-use the name.
+Container IP addresses can change on any restart. Service names never do.
+Always use the name.
 
 ## See it yourself
 
@@ -73,8 +73,14 @@ docker compose up -d
 docker compose exec nodered getent hosts influxdb
 ```
 
-Different address, same name. This is the whole argument for service names in
-one experiment.
+Usually a different address, always the same name. That is the whole argument
+for service names in one experiment.
+
+If the address happens to come back identical, run it once or twice more. Docker
+hands out addresses in the order containers actually start, and that order is a
+race — nothing reserves `172.21.0.2` for InfluxDB. Getting the same number twice
+is luck, not a guarantee, and writing that number into a config is exactly the
+bug this experiment is here to prevent.
 
 ## The `localhost` trap
 
