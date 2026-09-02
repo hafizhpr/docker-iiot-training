@@ -91,8 +91,10 @@ docker compose up -d
 
 `-d` is detached — it returns your prompt instead of streaming logs forever.
 
-**The first run downloads about 1.5 GB** and takes a few minutes on a normal
-connection. You will see layer-by-layer progress:
+**The first run pulls roughly 2.5 GB of images** and takes a few minutes on a
+normal connection. The download itself is smaller — layers travel compressed
+and expand on disk — so watch the progress, not the clock. You will see
+layer-by-layer progress:
 
 ```
 mosquitto Pulling

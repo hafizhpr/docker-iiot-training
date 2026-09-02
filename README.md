@@ -79,6 +79,8 @@ Then open:
 ├── .env                        training credentials
 ├── mosquitto/config/
 │   └── mosquitto.conf          broker configuration
+├── nodered/
+│   └── Dockerfile              custom image built in Lesson 12
 └── docs/                       the lessons
 ```
 

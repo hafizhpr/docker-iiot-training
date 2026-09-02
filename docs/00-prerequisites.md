@@ -47,8 +47,17 @@ image — that is the whole idea.
 
 ## Disk space
 
-The four images in this course total roughly **1.5 GB**. Make sure you have
-5 GB free; Docker also needs room for volumes and its build cache.
+The four images in this course occupy roughly **2.5 GB** on disk:
+
+| Image | Size |
+|---|---|
+| `eclipse-mosquitto:2` | 36 MB |
+| `influxdb:2.7` | 553 MB |
+| `nodered/node-red:4.1.0-22` | 905 MB |
+| `grafana/grafana:12.3.3` | 995 MB |
+
+Check your own with `docker images` after Lesson 03. Make sure you have 8 GB
+free; Docker also needs room for volumes and its build cache.
 
 ## Optional but recommended
 
