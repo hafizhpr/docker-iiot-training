@@ -53,7 +53,8 @@ Remove unused resources:
 ```powershell
 docker container prune   # stopped containers
 docker image prune       # dangling images
-docker volume prune      # volumes not used by ANY container
+docker volume prune      # unused ANONYMOUS volumes only
+docker volume prune -a   # unused volumes including NAMED ones
 docker network prune     # unused networks
 ```
 
@@ -64,12 +65,22 @@ docker system prune -a --volumes
 ```
 
 That removes every stopped container, every unused image, every unused network,
-**and every unused volume on the machine** — including work from projects that
-have nothing to do with this course.
+and every unused **anonymous** volume on the machine — including work from
+projects that have nothing to do with this course.
 
-⚠️ `docker volume prune` counts a volume as unused if no container currently
-exists for it. Run `docker compose down` first and your training data qualifies
-as unused. The two commands are harmless alone and destructive in sequence.
+⚠️ **Named volumes need `-a`.** Modern Docker treats "unused volume" as
+*anonymous* by default, so plain `docker volume prune` and
+`docker system prune --volumes` leave `iiot-training_influxdb_data` alone.
+Adding `-a` is what reaches named volumes. Check your own build:
+
+```powershell
+docker volume prune --help    # look for: -a, --all
+```
+
+⚠️ **A volume counts as unused when no container exists for it** — not when no
+container is running. So `docker compose down` followed by
+`docker volume prune -a` deletes your training data. Either command is harmless
+alone; the sequence is not.
 
 Read the summary it prints before confirming. Every time.
 
@@ -135,7 +146,8 @@ file.
 ## Checkpoint
 
 1. What is the exact difference between `down` and `down -v`?
-2. Why is `docker volume prune` dangerous right after `docker compose down`?
+2. Why is `docker volume prune -a` dangerous right after `docker compose down`,
+   and why does the same command without `-a` leave your data alone?
 3. Why can you not simply copy a named volume with a file manager?
 
 ---

@@ -21,10 +21,32 @@ Guessing is slower than looking. Look.
 | `Restarting (1)` | Crashing on startup, in a loop — check logs immediately |
 | `Exited (0)` | Stopped cleanly |
 | `Exited (1)` | Stopped with an error |
+| `Exited (143)` | Killed by SIGTERM — the normal result of `docker compose stop` |
 | `Created` | Never started |
 
 `Restarting` is the loud one. `restart: unless-stopped` is faithfully
 restarting a container that dies every time.
+
+### Not every non-zero exit code is a fault
+
+`docker compose stop` sends SIGTERM. A container that shuts down on that signal
+exits `0`; one that does not handle it is killed by it and exits `143`
+(`128 + 15`, the signal number). Both are normal. Our own stack is mixed:
+
+```
+grafana     Exited (0)
+influxdb    Exited (2)
+mosquitto   Exited (0)
+nodered     Exited (143)
+```
+
+Nothing there is broken — that is four applications with four different
+opinions about SIGTERM.
+
+The code only matters when you did **not** ask the container to stop. An
+`Exited (1)` or `Exited (2)` right after `up -d`, or paired with `Restarting`,
+is a real failure. The same code after your own `stop` is not. Ask what you
+did last before you read the number.
 
 ---
 

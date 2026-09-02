@@ -1,6 +1,6 @@
 # Custom Node-RED image with the InfluxDB palette node pre-installed.
 #
-# Used by docs/11-building-custom-images.md. The default docker-compose.yml
+# Used by docs/12-building-custom-images.md. The default docker-compose.yml
 # still uses the stock image, so students install the node by hand first and
 # feel the problem this file solves.
 FROM nodered/node-red:4.1.0-22
