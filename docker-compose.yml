@@ -1,0 +1,112 @@
+# ---------------------------------------------------------------------------
+# Docker Training - IIoT Stack
+# Mosquitto (MQTT broker) -> Node-RED (flow logic) -> InfluxDB (storage)
+#                                                  -> Grafana (dashboards)
+#
+# TRAINING CONFIGURATION ONLY. Anonymous MQTT access and a hardcoded
+# InfluxDB token make this unsafe for any real deployment.
+# ---------------------------------------------------------------------------
+
+name: iiot-training
+
+services:
+
+  # --- MQTT broker: the message bus every device publishes to ---------------
+  mosquitto:
+    image: eclipse-mosquitto:2
+    container_name: mosquitto
+    restart: unless-stopped
+    ports:
+      - "1883:1883"   # MQTT
+      - "9001:9001"   # MQTT over WebSockets
+    volumes:
+      # Bind mount: you edit this file on your host with a normal editor.
+      - ./mosquitto/config:/mosquitto/config
+      # Named volumes: Docker owns these, they survive `docker compose down`.
+      - mosquitto_data:/mosquitto/data
+      - mosquitto_log:/mosquitto/log
+    networks:
+      - iiot-net
+
+  # --- Time-series database: where sensor readings are stored ---------------
+  influxdb:
+    image: influxdb:2.7
+    container_name: influxdb
+    restart: unless-stopped
+    ports:
+      - "8086:8086"
+    environment:
+      # `setup` mode performs the entire first-run initialisation from these
+      # variables, so nobody has to click through the web installer.
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_USERNAME: ${INFLUXDB_USERNAME}
+      DOCKER_INFLUXDB_INIT_PASSWORD: ${INFLUXDB_PASSWORD}
+      DOCKER_INFLUXDB_INIT_ORG: ${INFLUXDB_ORG}
+      DOCKER_INFLUXDB_INIT_BUCKET: ${INFLUXDB_BUCKET}
+      # A fixed token means Node-RED and Grafana can be configured before the
+      # database has ever been started. Never do this outside a classroom.
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: ${INFLUXDB_TOKEN}
+    volumes:
+      - influxdb_data:/var/lib/influxdb2
+      - influxdb_config:/etc/influxdb2
+    networks:
+      - iiot-net
+
+  # --- Flow engine: subscribes to MQTT, writes to InfluxDB ------------------
+  nodered:
+    image: nodered/node-red:4.1.0-22
+    container_name: nodered
+    restart: unless-stopped
+    ports:
+      - "1880:1880"
+    environment:
+      TZ: ${TZ}
+    # Lets flows reach services running on the HOST machine (a Modbus TCP
+    # server, a local database) at the address host.docker.internal.
+    # Docker Desktop provides that name already; this line is what makes the
+    # same compose file work on Docker Engine for Linux too. See docs/04.
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      # Named volume, not a bind mount: the image runs as UID 1000 and a bind
+      # mount would hit permission errors on most hosts. See docs/09.
+      - nodered_data:/data
+    networks:
+      - iiot-net
+    # depends_on controls START ORDER ONLY. It does not wait for a service to
+    # become ready. Node-RED reconnects on its own, so that is fine here.
+    depends_on:
+      - mosquitto
+      - influxdb
+
+  # --- Dashboards -----------------------------------------------------------
+  grafana:
+    image: grafana/grafana:12.3.3
+    container_name: grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_USER}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD}
+    volumes:
+      - grafana_data:/var/lib/grafana
+    networks:
+      - iiot-net
+    depends_on:
+      - influxdb
+
+# Every named volume must be declared here before a service can use it.
+volumes:
+  mosquitto_data:
+  mosquitto_log:
+  influxdb_data:
+  influxdb_config:
+  nodered_data:
+  grafana_data:
+
+# One user-defined bridge network. Its built-in DNS is what lets containers
+# reach each other by service name: http://influxdb:8086, mqtt://mosquitto:1883
+networks:
+  iiot-net:
+    driver: bridge

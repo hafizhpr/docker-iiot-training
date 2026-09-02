@@ -1,0 +1,12 @@
+# ---------------------------------------------------------------------------
+# This training repository deliberately commits .env, because every student
+# must start from an identical, working state. See the security notice in
+# README.md.
+#
+# In a real project you would uncomment the next line instead.
+# ---------------------------------------------------------------------------
+# .env
+
+# Scratch files
+image.png
+*.tar.gz
