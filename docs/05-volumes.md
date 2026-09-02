@@ -79,7 +79,7 @@ volume`.
 Write a data point:
 
 ```powershell
-docker compose exec influxdb influx write  --bucket sensors --org training  --token training-token-do-not-use-in-production  --precision s "temperature,line=line1 value=42.5"
+docker compose exec influxdb influx write  --bucket sensors --org training --token training-token-do-not-use-in-production  --precision s "temperature,line=line1 value=42.5"
 ```
 
 Destroy every container:
@@ -94,8 +94,14 @@ Nothing left. Now bring it back and look for the data:
 ```powershell
 docker compose up -d
 Start-Sleep 10
-docker compose exec influxdb influx query --org training  --token training-token-do-not-use-in-production  'from(bucket:"sensors") |> range(start:-1h) |> filter(fn:(r) => r._measurement == "temperature")'
+docker compose exec influxdb influx query --org training --token training-token-do-not-use-in-production 'from(bucket:\"sensors\") |> range(start:-1h) |> filter(fn:(r) => r._measurement == \"temperature\")'
 ```
+
+> **Why the `\"` escapes?** Flux requires double quotes around string
+> literals, but Windows PowerShell 5.1 strips embedded double quotes when it
+> hands arguments to a native program. Without the backslashes, InfluxDB
+> receives `bucket: sensors` and answers `undefined identifier sensors`.
+> Escaping them is the reliable form on PowerShell.
 
 The reading is still there. The containers were deleted and recreated; the
 volume was not touched.

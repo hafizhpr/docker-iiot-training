@@ -293,6 +293,35 @@ Retry the install from Manage palette.
 
 ---
 
+## Problem: Flux query says "undefined identifier"
+
+**Log:**
+
+```
+Error: failed to execute query: 400 Bad Request:
+error @1:13-1:20: undefined identifier sensors
+```
+
+**Cause:** Windows PowerShell 5.1 strips double quotes when passing arguments
+to a native program. Flux needs them around every string literal, so InfluxDB
+receives `from(bucket: sensors)` and treats `sensors` as a variable name that
+was never defined.
+
+**Fix:** escape the inner quotes with a backslash.
+
+| | |
+|---|---|
+| Fails | `'from(bucket:"sensors")'` |
+| Works | `'from(bucket:\"sensors\")'` |
+
+Flux has no single-quoted string form, so swapping the quote style does not
+help — `from(bucket:'sensors')` is a syntax error.
+
+This affects only queries typed at the PowerShell prompt. Queries entered in
+the Grafana panel editor or the InfluxDB UI need no escaping.
+
+---
+
 ## Commands worth memorising
 
 ```powershell

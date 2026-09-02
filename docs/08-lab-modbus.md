@@ -217,7 +217,7 @@ to InfluxDB, **your Modbus data is now in the database with no further work.**
 Confirm it:
 
 ```powershell
-docker compose exec influxdb influx query --org training --token training-token-do-not-use-in-production 'from(bucket:"sensors") |> range(start:-5m) |> filter(fn:(r) => r._measurement == "temperature")'
+docker compose exec influxdb influx query --org training --token training-token-do-not-use-in-production 'from(bucket:\"sensors\") |> range(start:-5m) |> filter(fn:(r) => r._measurement == \"temperature\")'
 ```
 
 That is the payoff of a topic convention. The storage flow never needed to know

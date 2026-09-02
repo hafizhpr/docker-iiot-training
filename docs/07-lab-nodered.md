@@ -172,7 +172,7 @@ docker compose exec mosquitto mosquitto_pub -h localhost -t 'factory/line1/press
 Verify it landed:
 
 ```powershell
-docker compose exec influxdb influx query --org training --token training-token-do-not-use-in-production 'from(bucket:"sensors") |> range(start:-1h)'
+docker compose exec influxdb influx query --org training --token training-token-do-not-use-in-production 'from(bucket:\"sensors\") |> range(start:-1h)'
 ```
 
 You should see rows with `_measurement` of `temperature` and `pressure`, tagged
