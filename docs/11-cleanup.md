@@ -134,6 +134,10 @@ docker run --rm  -v iiot-training_influxdb_data:/target  -v "${PWD}:/backup"  al
 Stop the stack before backing up a database, or you capture a half-written
 file.
 
+That is one volume. This project has six, and moving the stack to a different
+computer means carrying all of them plus the images. Lesson 13 does the whole
+job.
+
 ## End-of-session checklist
 
 | Situation | Command |

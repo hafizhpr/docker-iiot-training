@@ -10,3 +10,5 @@
 # Scratch files
 image.png
 *.tar.gz
+*.tar
+backup/

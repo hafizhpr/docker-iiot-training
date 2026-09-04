@@ -190,4 +190,4 @@ Then rebuild with `docker compose up -d --build`.
 
 ---
 
-**Previous:** [11 — Cleanup](11-cleanup.md) · **Back to:** [README](../README.md)
+**Previous:** [11 — Cleanup](11-cleanup.md) · **Next:** [13 — Bonus: Backup, Restore, and Moving to Another Machine](13-backup-migration.md)

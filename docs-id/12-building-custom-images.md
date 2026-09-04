@@ -191,4 +191,4 @@ Kemudian rebuild dengan `docker compose up -d --build`.
 
 ---
 
-**Sebelumnya:** [11 — Cleanup](11-cleanup.md) · **Kembali ke:** [README](../README.md)
+**Sebelumnya:** [11 — Cleanup](11-cleanup.md) · **Selanjutnya:** [13 — Bonus: Backup, Restore, dan Migrasi ke Mesin Lain](13-backup-migration.md)

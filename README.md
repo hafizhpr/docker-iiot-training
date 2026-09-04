@@ -32,6 +32,7 @@ The stack is the excuse. The Docker concepts are the point:
 | Polling a PLC and scaling raw registers | Lesson 08 |
 | Reading logs and shelling into containers | Lesson 10 |
 | Building your own image | Lesson 12 |
+| Moving a stack to another machine | Lesson 13 |
 
 ## Course outline
 
@@ -50,6 +51,7 @@ The stack is the excuse. The Docker concepts are the point:
 | 10 | [Troubleshooting](docs/10-troubleshooting.md) | 30 min |
 | 11 | [Cleanup](docs/11-cleanup.md) | 15 min |
 | 12 | [Bonus: Building Custom Images](docs/12-building-custom-images.md) | 40 min |
+| 13 | [Bonus: Backup, Restore and Moving to Another Machine](docs/13-backup-migration.md) | 35 min |
 
 Roughly one and a half days, or three comfortable half-days.
 

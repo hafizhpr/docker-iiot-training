@@ -137,6 +137,10 @@ docker run --rm  -v iiot-training_influxdb_data:/target  -v "${PWD}:/backup"  al
 Hentikan stack sebelum mem-backup database, atau kamu menangkap file yang setengah
 tertulis.
 
+Itu baru satu volume. Project ini punya enam, dan memindahkan stack ke komputer
+lain berarti membawa semuanya plus image-nya. Pelajaran 13 mengerjakan
+keseluruhannya.
+
 ## Checklist Akhir Sesi
 
 | Situasi | Perintah |
